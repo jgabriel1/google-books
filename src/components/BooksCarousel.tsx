@@ -1,5 +1,12 @@
-import { Box, HStack, IconButton, Image, Text } from '@chakra-ui/react';
-import { useRef } from 'react';
+import {
+  Box,
+  Container,
+  HStack,
+  IconButton,
+  Image,
+  Text,
+} from '@chakra-ui/react';
+import { ReactNode, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import { State } from '../store';
 import { booksApi } from '../store/booksApi';
@@ -7,7 +14,7 @@ import { booksApi } from '../store/booksApi';
 const { useGetBooksQuery } = booksApi;
 
 type BooksCarouselProps = {
-  title: string;
+  title: ReactNode;
   searchValue: string;
 };
 
@@ -28,7 +35,7 @@ export const BooksCarousel = ({ title, searchValue }: BooksCarouselProps) => {
   const carouselRef = useRef<HTMLDivElement>(null);
 
   return (
-    <Box>
+    <Container maxW="1120px" px={['22px', '76px']}>
       <Text fontWeight={600} fontSize="16px" mb="40px">
         {title}
       </Text>
@@ -52,7 +59,7 @@ export const BooksCarousel = ({ title, searchValue }: BooksCarouselProps) => {
         <HStack
           ref={carouselRef}
           overflowX="auto"
-          spacing="32px"
+          spacing={['16px', '32px']}
           scrollSnapType="x mandatory"
           sx={{
             scrollbarWidth: 'none',
@@ -67,8 +74,8 @@ export const BooksCarousel = ({ title, searchValue }: BooksCarouselProps) => {
               book.volumeInfo?.imageLinks?.thumbnail && (
                 <Image
                   objectFit="cover"
-                  w="200px"
-                  h="300px"
+                  w={['60px', '120px', '200px']}
+                  h={['90px', '180px', '300px']}
                   borderRadius="10px"
                   src={book.volumeInfo.imageLinks.thumbnail}
                 />
@@ -91,6 +98,6 @@ export const BooksCarousel = ({ title, searchValue }: BooksCarouselProps) => {
           icon={<Image src="arrow.svg" />}
         />
       </Box>
-    </Box>
+    </Container>
   );
 };

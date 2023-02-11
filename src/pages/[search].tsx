@@ -8,6 +8,7 @@ import {
   Center,
   Spinner,
   Image,
+  Container,
 } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { useEffect, useMemo } from 'react';
@@ -15,8 +16,7 @@ import { useInView } from 'react-intersection-observer';
 import { useDispatch, useSelector } from 'react-redux';
 import { BookCard } from '../components/BookCard';
 import { FilterField } from '../components/FilterField';
-import { PageWrapper } from '../components/PageWrapper';
-import { State, store } from '../store';
+import { State } from '../store';
 import { booksApi } from '../store/booksApi';
 import { increasePagination, initPagination } from '../store/booksPagination';
 import {
@@ -74,7 +74,7 @@ const Search = () => {
   });
 
   return (
-    <PageWrapper>
+    <Container maxW="1120px" p="60px">
       <Grid gridTemplateColumns="1fr 4fr" gap="96px">
         <Box minW="200px">
           <Text fontWeight={600} fontSize="18px" mb="24px">
@@ -154,7 +154,7 @@ const Search = () => {
           )}
         </Box>
       </Grid>
-    </PageWrapper>
+    </Container>
   );
 };
 

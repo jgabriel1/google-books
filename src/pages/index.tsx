@@ -1,19 +1,29 @@
-import { VStack } from '@chakra-ui/react';
+import { Container, Flex, Text, Box } from '@chakra-ui/react';
 import { BooksCarousel } from '../components/BooksCarousel';
-import { PageWrapper } from '../components/PageWrapper';
 
-const Home = () => {
-  return (
-    <PageWrapper>
-      <VStack spacing="64px" align="stretch">
-        <BooksCarousel title="Aventura" searchValue="subject:adventure" />
+const Home = () => (
+  <Flex direction="column" gap="64px" align="stretch" py="60px">
+    <BooksCarousel title="Aventura" searchValue="subject:adventure" />
 
-        <BooksCarousel title="Ação" searchValue="subject:action" />
+    <BooksCarousel title="Ação" searchValue="subject:action" />
 
-        <BooksCarousel title="Infantil" searchValue="subject:cartoons" />
-      </VStack>
-    </PageWrapper>
-  );
-};
+    <Box w="full" bg="#DAF6F3" paddingTop="64px" paddingBottom="88px">
+      <BooksCarousel
+        title={
+          <Text
+            color="#A977D8"
+            fontWeight={600}
+            fontSize={{ sm: '16px', md: '22px', lg: '28px' }}
+          >
+            Destaques
+          </Text>
+        }
+        searchValue="featured"
+      />
+    </Box>
+
+    <BooksCarousel title="Infantil" searchValue="subject:cartoons" />
+  </Flex>
+);
 
 export default Home;
