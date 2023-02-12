@@ -4,7 +4,8 @@ import {
   HStack,
   IconButton,
   Image,
-  Text,
+  useBreakpoint,
+  useBreakpointValue,
 } from '@chakra-ui/react';
 import { ReactNode, useRef } from 'react';
 import { useSelector } from 'react-redux';
@@ -34,27 +35,29 @@ export const BooksCarousel = ({ title, searchValue }: BooksCarouselProps) => {
 
   const carouselRef = useRef<HTMLDivElement>(null);
 
+  const isSmallestScreenSize = useBreakpointValue([true, false]);
+
   return (
     <Container maxW="1120px" px={['22px', '76px']}>
-      <Text fontWeight={600} fontSize="16px" mb="40px">
-        {title}
-      </Text>
+      {title}
 
       <Box position="relative">
-        <IconButton
-          aria-label="scroll-left"
-          position="absolute"
-          bottom="50%"
-          left="-20px"
-          onClick={() => {
-            carouselRef.current.scroll({
-              behavior: 'smooth',
-              left: carouselRef.current.scrollLeft - 300,
-            });
-          }}
-          rounded="full"
-          icon={<Image src="arrow.svg" transform={'rotate(180deg)'} />}
-        />
+        {!isSmallestScreenSize && (
+          <IconButton
+            aria-label="scroll-left"
+            position="absolute"
+            bottom="50%"
+            left="-20px"
+            onClick={() => {
+              carouselRef.current.scroll({
+                behavior: 'smooth',
+                left: carouselRef.current.scrollLeft - 300,
+              });
+            }}
+            rounded="full"
+            icon={<Image src="arrow.svg" transform={'rotate(180deg)'} />}
+          />
+        )}
 
         <HStack
           ref={carouselRef}
@@ -76,27 +79,29 @@ export const BooksCarousel = ({ title, searchValue }: BooksCarouselProps) => {
                   objectFit="cover"
                   w={['60px', '120px', '200px']}
                   h={['90px', '180px', '300px']}
-                  borderRadius="10px"
+                  borderRadius="5px"
                   src={book.volumeInfo.imageLinks.thumbnail}
                 />
               )
           )}
         </HStack>
 
-        <IconButton
-          aria-label="scroll-right"
-          position="absolute"
-          bottom="50%"
-          right="-20px"
-          onClick={() => {
-            carouselRef.current.scroll({
-              behavior: 'smooth',
-              left: carouselRef.current.scrollLeft + 300,
-            });
-          }}
-          rounded="full"
-          icon={<Image src="arrow.svg" />}
-        />
+        {!isSmallestScreenSize && (
+          <IconButton
+            aria-label="scroll-right"
+            position="absolute"
+            bottom="50%"
+            right="-20px"
+            onClick={() => {
+              carouselRef.current.scroll({
+                behavior: 'smooth',
+                left: carouselRef.current.scrollLeft + 300,
+              });
+            }}
+            rounded="full"
+            icon={<Image src="arrow.svg" />}
+          />
+        )}
       </Box>
     </Container>
   );

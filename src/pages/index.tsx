@@ -2,18 +2,43 @@ import { Container, Flex, Text, Box } from '@chakra-ui/react';
 import { BooksCarousel } from '../components/BooksCarousel';
 
 const Home = () => (
-  <Flex direction="column" gap="64px" align="stretch" py="60px">
-    <BooksCarousel title="Aventura" searchValue="subject:adventure" />
+  <Flex
+    direction="column"
+    gap={['24px', '64px']}
+    align="stretch"
+    py={['24px', '60px']}
+  >
+    <BooksCarousel
+      title={
+        <Text fontWeight={600} fontSize="16px" mb={['24px', '40px']}>
+          Aventura
+        </Text>
+      }
+      searchValue="subject:adventure"
+    />
 
-    <BooksCarousel title="Ação" searchValue="subject:action" />
+    <BooksCarousel
+      title={
+        <Text fontWeight={600} fontSize="16px" mb={['24px', '40px']}>
+          Ação
+        </Text>
+      }
+      searchValue="subject:action"
+    />
 
-    <Box w="full" bg="#DAF6F3" paddingTop="64px" paddingBottom="88px">
+    <Box
+      w="full"
+      bg="#DAF6F3"
+      paddingTop={['24px', '64px']}
+      paddingBottom={['36px', '88px']}
+    >
       <BooksCarousel
         title={
           <Text
             color="#A977D8"
             fontWeight={600}
-            fontSize={{ sm: '16px', md: '22px', lg: '28px' }}
+            fontSize={['16px', '22px', '28px']}
+            mb={['24px', '40px']}
           >
             Destaques
           </Text>
@@ -22,7 +47,14 @@ const Home = () => (
       />
     </Box>
 
-    <BooksCarousel title="Infantil" searchValue="subject:cartoons" />
+    <BooksCarousel
+      title={
+        <Text fontWeight={600} fontSize="16px" mb={['24px', '40px']}>
+          Infantil
+        </Text>
+      }
+      searchValue="subject:cartoons"
+    />
   </Flex>
 );
 
