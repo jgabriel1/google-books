@@ -1,5 +1,5 @@
-import { State } from '../../store';
-import { Book } from '../../store/booksApi';
+import { State } from '../store';
+import { Book } from '../store/booksApi';
 
 type Filter = {
   readonly title: string;

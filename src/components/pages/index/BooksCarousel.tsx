@@ -9,8 +9,8 @@ import {
 } from '@chakra-ui/react';
 import { ReactNode, useRef } from 'react';
 import { useSelector } from 'react-redux';
-import { State } from '../store';
-import { booksApi } from '../store/booksApi';
+import { State } from '../../../store';
+import { booksApi } from '../../../store/booksApi';
 
 const { useGetBooksQuery } = booksApi;
 

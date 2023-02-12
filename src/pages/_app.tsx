@@ -1,7 +1,7 @@
 import { ChakraProvider, extendTheme, Theme } from '@chakra-ui/react';
 import { Inter } from '@next/font/google';
 import { Provider } from 'react-redux';
-import { Layout } from '../components/Layout';
+import { Layout } from '../components/common/Layout';
 import { store } from '../store';
 
 const inter = Inter({ subsets: ['latin'] });

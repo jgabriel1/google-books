@@ -10,16 +10,14 @@ import {
   Container,
   useBreakpointValue,
   useDisclosure,
-  IconButton,
   HStack,
 } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { useEffect, useMemo } from 'react';
 import { useInView } from 'react-intersection-observer';
 import { useDispatch, useSelector } from 'react-redux';
-import { BookCard } from '../components/BookCard';
-import { FilterField } from '../components/FilterField';
-import { State } from '../store';
+import { BookCard } from '../components/pages/[search]/BookCard';
+import { type State } from '../store';
 import { booksApi } from '../store/booksApi';
 import { increasePagination, initPagination } from '../store/booksPagination';
 import {
@@ -28,13 +26,10 @@ import {
   setFormatFilter,
   setPriceFilter,
 } from '../store/filters';
-import {
-  ORDERED_AVAILABILITY_FILTERS,
-  ORDERED_FORMAT_FILTERS,
-  ORDERED_PRICE_FILTERS,
-  applyFilters,
-} from '../helpers/filters';
-import { LargeButton } from '../components/LargeButton';
+import { applyFilters } from '../helpers/filters';
+import { LargeButton } from '../components/pages/[search]/LargeButton';
+import { FiltersSelector } from '../components/pages/[search]/FiltersSelector';
+import { FiltersModal } from '../components/pages/[search]/FiltersModal';
 
 const { useGetBooksQuery } = booksApi;
 
@@ -79,7 +74,7 @@ const Search = () => {
 
   const isSmallestScreen = useBreakpointValue([true, false]);
 
-  const filtersModal = useDisclosure();
+  const filtersModalDisclosure = useDisclosure();
 
   return (
     <>
@@ -105,30 +100,16 @@ const Search = () => {
                 </LargeButton>
               )}
 
-              <VStack spacing="24px" align="start">
-                <FilterField
-                  title="Preço"
-                  options={ORDERED_PRICE_FILTERS}
-                  checkedOptionId={filters.price}
-                  onChangeOption={(option) => dispatch(setPriceFilter(option))}
-                />
-
-                <FilterField
-                  title="Disponibilidade para venda"
-                  options={ORDERED_AVAILABILITY_FILTERS}
-                  checkedOptionId={filters.availability}
-                  onChangeOption={(option) =>
-                    dispatch(setAvailabilityFilter(option))
-                  }
-                />
-
-                <FilterField
-                  title="Formatos disponíveis"
-                  options={ORDERED_FORMAT_FILTERS}
-                  checkedOptionId={filters.format}
-                  onChangeOption={(option) => dispatch(setFormatFilter(option))}
-                />
-              </VStack>
+              <FiltersSelector
+                filters={filters}
+                onSetPriceFilter={(filter) => dispatch(setPriceFilter(filter))}
+                onSetAvailabilityFilter={(filter) =>
+                  dispatch(setAvailabilityFilter(filter))
+                }
+                onSetFormatFilter={(filter) =>
+                  dispatch(setFormatFilter(filter))
+                }
+              />
             </Box>
           )}
 
@@ -139,7 +120,10 @@ const Search = () => {
 
             {isSmallestScreen && (
               <>
-                <LargeButton background="#8553F4" onClick={filtersModal.onOpen}>
+                <LargeButton
+                  background="#8553F4"
+                  onClick={filtersModalDisclosure.onOpen}
+                >
                   <HStack justify="center">
                     <Image src="filter.svg" />
 
@@ -184,70 +168,20 @@ const Search = () => {
         </Grid>
       </Container>
 
-      {filtersModal.isOpen && (
-        <Flex
-          direction="column"
-          position="fixed"
-          top="0"
-          bottom="0"
-          left="0"
-          right="0"
-          bg="#FFFFFF"
-          py="32px"
-          px="16px"
-        >
-          <Flex align="center" justify="space-between" mb="32px">
-            <Text fontWeight={600} fontSize="18px">
-              Filtrar
-            </Text>
-
-            <IconButton
-              variant="outline"
-              border="none"
-              aria-label="close filters modal"
-              icon={<Image src="cancel-dark.svg" height="10px" width="10px" />}
-              onClick={() => {
-                dispatch(clearFilters());
-                filtersModal.onClose();
-              }}
-            />
-          </Flex>
-
-          <Box flex="1">
-            <VStack spacing="24px" align="start">
-              <FilterField
-                title="Preço"
-                options={ORDERED_PRICE_FILTERS}
-                checkedOptionId={filters.price}
-                onChangeOption={(option) => dispatch(setPriceFilter(option))}
-              />
-
-              <FilterField
-                title="Disponibilidade para venda"
-                options={ORDERED_AVAILABILITY_FILTERS}
-                checkedOptionId={filters.availability}
-                onChangeOption={(option) =>
-                  dispatch(setAvailabilityFilter(option))
-                }
-              />
-
-              <FilterField
-                title="Formatos disponíveis"
-                options={ORDERED_FORMAT_FILTERS}
-                checkedOptionId={filters.format}
-                onChangeOption={(option) => dispatch(setFormatFilter(option))}
-              />
-            </VStack>
-          </Box>
-
-          <LargeButton bg="#8553F4" onClick={filtersModal.onClose}>
-            <HStack justify="center">
-              <Image src="filter.svg" />
-
-              <Text>Filtrar Agora</Text>
-            </HStack>
-          </LargeButton>
-        </Flex>
+      {filtersModalDisclosure.isOpen && (
+        <FiltersModal
+          onClickClose={() => {
+            dispatch(clearFilters());
+            filtersModalDisclosure.onClose();
+          }}
+          onClickConfirmFilter={filtersModalDisclosure.onClose}
+          filters={filters}
+          onSetPriceFilter={(filter) => dispatch(setPriceFilter(filter))}
+          onSetAvailabilityFilter={(filter) =>
+            dispatch(setAvailabilityFilter(filter))
+          }
+          onSetFormatFilter={(filter) => dispatch(setFormatFilter(filter))}
+        />
       )}
     </>
   );
