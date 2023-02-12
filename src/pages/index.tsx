@@ -1,4 +1,4 @@
-import { Container, Flex, Text, Box } from '@chakra-ui/react';
+import { Flex, Text, Box } from '@chakra-ui/react';
 import { BooksCarousel } from '../components/pages/index/BooksCarousel';
 
 const Home = () => (

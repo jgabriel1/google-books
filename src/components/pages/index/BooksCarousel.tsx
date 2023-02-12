@@ -4,7 +4,6 @@ import {
   HStack,
   IconButton,
   Image,
-  useBreakpoint,
   useBreakpointValue,
 } from '@chakra-ui/react';
 import { ReactNode, useRef } from 'react';
@@ -76,6 +75,7 @@ export const BooksCarousel = ({ title, searchValue }: BooksCarouselProps) => {
             (book) =>
               book.volumeInfo?.imageLinks?.thumbnail && (
                 <Image
+                  key={`book-cover-item-${book.id}`}
                   objectFit="cover"
                   w={['60px', '120px', '200px']}
                   h={['90px', '180px', '300px']}
