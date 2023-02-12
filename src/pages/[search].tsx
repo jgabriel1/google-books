@@ -4,11 +4,14 @@ import {
   Text,
   Flex,
   VStack,
-  Button,
   Center,
   Spinner,
   Image,
   Container,
+  useBreakpointValue,
+  useDisclosure,
+  IconButton,
+  HStack,
 } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { useEffect, useMemo } from 'react';
@@ -31,6 +34,7 @@ import {
   ORDERED_PRICE_FILTERS,
   applyFilters,
 } from '../helpers/filters';
+import { LargeButton } from '../components/LargeButton';
 
 const { useGetBooksQuery } = booksApi;
 
@@ -73,88 +77,179 @@ const Search = () => {
     onChange: (inView) => inView && dispatch(increasePagination(searchValue)),
   });
 
+  const isSmallestScreen = useBreakpointValue([true, false]);
+
+  const filtersModal = useDisclosure();
+
   return (
-    <Container maxW="1120px" p="60px">
-      <Grid gridTemplateColumns="1fr 4fr" gap="96px">
-        <Box minW="200px">
-          <Text fontWeight={600} fontSize="18px" mb="24px">
-            Filtrar
-          </Text>
+    <>
+      <Container maxW="1120px" p={['20px', '60px']}>
+        <Grid
+          gridTemplateColumns={['1fr', '1fr 4fr']}
+          gap={['40px', '40px', '80px']}
+        >
+          {!isSmallestScreen && (
+            <Box minW="200px">
+              <Text fontWeight={600} fontSize="18px" mb="24px">
+                Filtrar
+              </Text>
 
-          {hasAnyFiltersOn && (
-            <Button
-              mb="24px"
-              variant="unstyled"
-              fontWeight={600}
-              fontSize="16px"
-              color="#F1F7FC"
-              background="#ADB7BF"
-              w="full"
-              h="auto"
-              py="12px"
-              onClick={() => dispatch(clearFilters())}
-              px="20px"
-            >
-              <Flex justify="space-between">
-                <Text>LIMPAR FILTRO</Text>
+              {hasAnyFiltersOn && (
+                <LargeButton
+                  bg="#ADB7BF"
+                  onClick={() => dispatch(clearFilters())}
+                  rightIcon={<Image src="cancel.svg" />}
+                  mb="24px"
+                >
+                  Limpar Filtro
+                </LargeButton>
+              )}
 
-                <Image src="cancel.svg" />
-              </Flex>
-            </Button>
+              <VStack spacing="24px" align="start">
+                <FilterField
+                  title="Preço"
+                  options={ORDERED_PRICE_FILTERS}
+                  checkedOptionId={filters.price}
+                  onChangeOption={(option) => dispatch(setPriceFilter(option))}
+                />
+
+                <FilterField
+                  title="Disponibilidade para venda"
+                  options={ORDERED_AVAILABILITY_FILTERS}
+                  checkedOptionId={filters.availability}
+                  onChangeOption={(option) =>
+                    dispatch(setAvailabilityFilter(option))
+                  }
+                />
+
+                <FilterField
+                  title="Formatos disponíveis"
+                  options={ORDERED_FORMAT_FILTERS}
+                  checkedOptionId={filters.format}
+                  onChangeOption={(option) => dispatch(setFormatFilter(option))}
+                />
+              </VStack>
+            </Box>
           )}
 
-          <VStack spacing="24px" align="start">
-            <FilterField
-              title="Preço"
-              options={ORDERED_PRICE_FILTERS}
-              checkedOptionId={filters.price}
-              onChangeOption={(option) => dispatch(setPriceFilter(option))}
-            />
+          <VStack spacing={['24px', '32px']} align="left">
+            <Text fontWeight={600} fontSize="16px">
+              Resultados para: "{searchValue}"
+            </Text>
 
-            <FilterField
-              title="Disponibilidade para venda"
-              options={ORDERED_AVAILABILITY_FILTERS}
-              checkedOptionId={filters.availability}
-              onChangeOption={(option) =>
-                dispatch(setAvailabilityFilter(option))
-              }
-            />
+            {isSmallestScreen && (
+              <>
+                <LargeButton background="#8553F4" onClick={filtersModal.onOpen}>
+                  <HStack justify="center">
+                    <Image src="filter.svg" />
 
-            <FilterField
-              title="Formatos disponíveis"
-              options={ORDERED_FORMAT_FILTERS}
-              checkedOptionId={filters.format}
-              onChangeOption={(option) => dispatch(setFormatFilter(option))}
-            />
+                    <Text>FILTRAR</Text>
+                  </HStack>
+                </LargeButton>
+
+                {hasAnyFiltersOn && (
+                  <LargeButton
+                    bg="#ADB7BF"
+                    onClick={() => dispatch(clearFilters())}
+                  >
+                    Limpar Filtro
+                  </LargeButton>
+                )}
+              </>
+            )}
+
+            <Flex
+              flexWrap="wrap"
+              gap="24px"
+              justify={['center', 'center', 'start']}
+            >
+              {filteredBooks.map((book) => (
+                <BookCard
+                  key={`books-list-${book.id}`}
+                  author={book.volumeInfo.authors && book.volumeInfo.authors[0]}
+                  title={book.volumeInfo.title}
+                  imageSrc={book.volumeInfo?.imageLinks?.thumbnail}
+                />
+              ))}
+
+              <Box ref={bottomInViewRef} />
+            </Flex>
+
+            {books.isFetching && (
+              <Center py="32px">
+                <Spinner />
+              </Center>
+            )}
           </VStack>
-        </Box>
+        </Grid>
+      </Container>
 
-        <Box>
-          <Text fontWeight={600} fontSize="16px" mb="32px">
-            Resultados para: "{searchValue}"
-          </Text>
+      {filtersModal.isOpen && (
+        <Flex
+          direction="column"
+          position="fixed"
+          top="0"
+          bottom="0"
+          left="0"
+          right="0"
+          bg="#FFFFFF"
+          py="32px"
+          px="16px"
+        >
+          <Flex align="center" justify="space-between" mb="32px">
+            <Text fontWeight={600} fontSize="18px">
+              Filtrar
+            </Text>
 
-          <Flex flexWrap="wrap" gap="24px">
-            {filteredBooks.map((book) => (
-              <BookCard
-                key={`books-list-${book.id}`}
-                author={book.volumeInfo.authors && book.volumeInfo.authors[0]}
-                title={book.volumeInfo.title}
-                imageSrc={book.volumeInfo?.imageLinks?.thumbnail}
-              />
-            ))}
-
-            <Box ref={bottomInViewRef} />
+            <IconButton
+              variant="outline"
+              border="none"
+              aria-label="close filters modal"
+              icon={<Image src="cancel-dark.svg" height="10px" width="10px" />}
+              onClick={() => {
+                dispatch(clearFilters());
+                filtersModal.onClose();
+              }}
+            />
           </Flex>
 
-          {books.isFetching && (
-            <Center py="32px">
-              <Spinner />
-            </Center>
-          )}
-        </Box>
-      </Grid>
-    </Container>
+          <Box flex="1">
+            <VStack spacing="24px" align="start">
+              <FilterField
+                title="Preço"
+                options={ORDERED_PRICE_FILTERS}
+                checkedOptionId={filters.price}
+                onChangeOption={(option) => dispatch(setPriceFilter(option))}
+              />
+
+              <FilterField
+                title="Disponibilidade para venda"
+                options={ORDERED_AVAILABILITY_FILTERS}
+                checkedOptionId={filters.availability}
+                onChangeOption={(option) =>
+                  dispatch(setAvailabilityFilter(option))
+                }
+              />
+
+              <FilterField
+                title="Formatos disponíveis"
+                options={ORDERED_FORMAT_FILTERS}
+                checkedOptionId={filters.format}
+                onChangeOption={(option) => dispatch(setFormatFilter(option))}
+              />
+            </VStack>
+          </Box>
+
+          <LargeButton bg="#8553F4" onClick={filtersModal.onClose}>
+            <HStack justify="center">
+              <Image src="filter.svg" />
+
+              <Text>Filtrar Agora</Text>
+            </HStack>
+          </LargeButton>
+        </Flex>
+      )}
+    </>
   );
 };
 
