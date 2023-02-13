@@ -71,3 +71,17 @@ yarn build && yarn start
 ```
 npm run build && npm start
 ```
+
+### Run Tests
+
+To run unit tests:
+
+```
+yarn test
+```
+
+Or
+
+```
+npm run test
+```
