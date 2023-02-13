@@ -38,12 +38,19 @@ export const SearchInput = ({ onSearch }: SearchInputProps) => {
         ref={searchInputRef}
         flex="1"
         variant="unstyled"
-        placeholder="Search"
+        placeholder="Buscar"
+        name="search"
+        aria-label="search field"
+        data-testid="search-input"
       />
 
-      <button type="submit">
+      <button
+        type="submit"
+        aria-label="search button"
+        data-testid="search-button"
+      >
         <Image
-          aria-label="Search"
+          aria-label="search icon"
           src="search.svg"
           height="16px"
           width="16px"

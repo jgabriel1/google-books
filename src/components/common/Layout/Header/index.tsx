@@ -27,12 +27,13 @@ export const Header = () => {
         background="#FFFFFF"
       >
         <Flex alignItems="center" justifyContent="space-between" gap="24px">
-          <Link href="/" type="button">
+          <Link aria-label="navigate home" href="/" type="button">
             <Image
-              aria-label="Logo"
+              aria-label="logo"
               src="logo.svg"
               alt="Árvore"
               height={isScreenSmallOrWider && '24px'}
+              data-testid="logo"
             />
           </Link>
 

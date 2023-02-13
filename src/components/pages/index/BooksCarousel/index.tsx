@@ -8,12 +8,12 @@ import {
 } from '@chakra-ui/react';
 import { ReactNode, useRef } from 'react';
 import { useSelector } from 'react-redux';
-import { State } from '../../../store';
-import { booksApi } from '../../../store/booksApi';
+import { State } from '../../../../store';
+import { booksApi } from '../../../../store/booksApi';
 
 const { useGetBooksQuery } = booksApi;
 
-type BooksCarouselProps = {
+export type BooksCarouselProps = {
   title: ReactNode;
   searchValue: string;
 };
@@ -43,7 +43,6 @@ export const BooksCarousel = ({ title, searchValue }: BooksCarouselProps) => {
       <Box position="relative">
         {!isSmallestScreenSize && (
           <IconButton
-            aria-label="scroll-left"
             position="absolute"
             bottom="50%"
             left="-20px"
@@ -55,6 +54,8 @@ export const BooksCarousel = ({ title, searchValue }: BooksCarouselProps) => {
             }}
             rounded="full"
             icon={<Image src="arrow.svg" transform={'rotate(180deg)'} />}
+            aria-label="scroll left"
+            data-testid="scroll-left-button"
           />
         )}
 
@@ -88,7 +89,6 @@ export const BooksCarousel = ({ title, searchValue }: BooksCarouselProps) => {
 
         {!isSmallestScreenSize && (
           <IconButton
-            aria-label="scroll-right"
             position="absolute"
             bottom="50%"
             right="-20px"
@@ -100,6 +100,8 @@ export const BooksCarousel = ({ title, searchValue }: BooksCarouselProps) => {
             }}
             rounded="full"
             icon={<Image src="arrow.svg" />}
+            aria-label="scroll right"
+            data-testid="scroll-right-button"
           />
         )}
       </Box>
