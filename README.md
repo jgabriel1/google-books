@@ -6,6 +6,10 @@ This project showcases the use of the Google Books API to search for specific ca
 
 The web page is also fully responsive being able to be displayed in any screen size, from very small (mobile) through medium (tablet) to regular size (desktop).
 
+## Deploy
+
+This application has been deployed to the following url: https://google-books-ecru.vercel.app/
+
 ## Technologies
 
 This project features a few technologies:
