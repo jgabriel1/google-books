@@ -1,6 +1,6 @@
 import { Text, Image, VStack } from '@chakra-ui/react';
 
-type BookCardProps = {
+export type BookCardProps = {
   imageSrc?: string;
   title: string;
   author: string;
